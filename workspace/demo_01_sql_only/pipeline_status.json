@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "run_id": "demo_01_sql_only",
+  "created_utc": "2026-11-23T00:38:06.630371+00:00",
+  "updated_utc": "2026-11-23T00:39:50.129180+00:00",
+  "status": "completed_with_warnings",
+  "settings": {
+    "source_config": "D:\\Proyectos\\CMUAgent\\Proyectos\\config\\mock_req_dummy_system1.json",
+    "initialize_rag": false,
+    "research_mode": "batch"
+  },
+  "stages": [
+    {
+      "name": "source_extraction",
+      "status": "ok",
+      "started_utc": "2026-11-23T00:38:06.630371+00:00",
+      "finished_utc": "2026-11-23T00:38:07.330546+00:00"
+    },
+    {
+      "name": "sql_ast_parsing",
+      "status": "ok",
+      "started_utc": "2026-11-23T00:38:07.336017+00:00",
+      "finished_utc": "2026-11-23T00:38:10.395048+00:00"
+    },
+    {
+      "name": "inventory_building",
+      "status": "ok",
+      "started_utc": "2026-11-23T00:38:10.400214+00:00",
+      "finished_utc": "2026-11-23T00:38:11.010343+00:00"
+    },
+    {
+      "name": "task_initialization",
+      "status": "ok",
+      "started_utc": "2026-11-23T00:38:11.026225+00:00",
+      "finished_utc": "2026-11-23T00:38:11.717808+00:00"
+    },
+    {
+      "name": "research_batch",
+      "status": "completed_with_warnings",
+      "started_utc": "2026-11-23T00:38:11.748018+00:00",
+      "summary": {
+        "total_pending": 5,
+        "selected": 5,
+        "processed": 5,
+        "valid_json": 3,
+        "invalid_response": 0,
+        "evidence_incomplete": 2,
+        "execution_error": 0,
+        "not_selected": 0,
+        "candidate_rules_proposed": 3,
+        "requested_actions_proposed": 0
+      },
+      "finished_utc": "2026-11-23T00:39:49.925857+00:00",
+      "warning": "Some baseline candidates have insufficient evidence; outputs remain unverified"
+    },
+    {
+      "name": "pilot_evaluation",
+      "status": "ok",
+      "finished_utc": "2026-11-23T00:39:50.102599+00:00",
+      "summary": {
+        "reference_cases": 5,
+        "structural_correctness": 0.6,
+        "predicate_groundedness": 1.0,
+        "classification_accuracy": 1.0
+      }
+    }
+  ],
+  "artifacts": {
+    "source_extraction": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_01_sql_only\\sources_manifest.json",
+    "sql_ast_parsing": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_01_sql_only\\ast_files\\ast_manifest.json",
+    "inventory_building": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_01_sql_only\\metadata\\inventory.json",
+    "task_initialization": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_01_sql_only\\research\\research_tasks.json",
+    "research_batch": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_01_sql_only\\research\\agent_runs\\batch_summary.json",
+    "pilot_evaluation": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_01_sql_only\\research\\evaluation_metrics.json"
+  },
+  "finished_utc": "2026-11-23T00:39:50.129180+00:00"
+}

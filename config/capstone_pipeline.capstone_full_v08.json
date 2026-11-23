@@ -1,0 +1,32 @@
+{
+  "workspace": "workspace",
+  "source_config": "config/mock_req_dummy_system1.json",
+  "research": {
+    "model_id": "Qwen/Qwen3-0.6B",
+    "task_id": null,
+    "max_tasks": 0,
+    "max_actions": 4,
+    "max_derived_tasks": 6,
+    "max_depth": 1,
+    "react_strategy": "v05",
+    "policy_fallback": false,
+    "catalog_evidence_gate": true,
+    "max_verification_rounds": 2,
+    "max_feedback_actions": 3,
+    "mode": "multiagent"
+  },
+  "rag": {
+    "initialize": true,
+    "document_directory": "mock_sql_examples/dummy_system1/rag_documents",
+    "document_top_k": 4,
+    "index_sql": false,
+    "document_queries": {
+      "dbo.RegisterOperation": "OperationType Amount request intake internal adjustment posting operation approval",
+      "dbo.RegisterOperationAfterCheck": "pending documentary review operation checks supporting cases approval lifecycle independent status"
+    }
+  },
+  "evaluation": {
+    "pilot_reference": "evaluation/pilot_reference_system1.json"
+  },
+  "run_id": "capstone_full_v08"
+}

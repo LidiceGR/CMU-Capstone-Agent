@@ -1,0 +1,26 @@
+{
+  "workspace": "workspace",
+  "source_config": "config/mock_req_dummy_system1.json",
+  "research": {
+    "model_id": "Qwen/Qwen3-0.6B",
+    "task_id": null,
+    "max_tasks": 0,
+    "max_actions": 4,
+    "max_derived_tasks": 6,
+    "max_depth": 1,
+    "react_strategy": "v05",
+    "policy_fallback": false,
+    "catalog_evidence_gate": true,
+    "max_verification_rounds": 2,
+    "max_feedback_actions": 3,
+    "mode": "react",
+    "allow_incomplete_react": true
+  },
+  "rag": {
+    "initialize": false
+  },
+  "evaluation": {
+    "pilot_reference": "evaluation/pilot_reference_system1.json"
+  },
+  "run_id": "demo_02_catalog_tools"
+}

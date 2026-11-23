@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "run_id": "demo_04_multiagent_doc_rag",
+  "created_utc": "2026-11-23T01:00:35.201612+00:00",
+  "updated_utc": "2026-11-23T01:11:21.936528+00:00",
+  "status": "completed",
+  "settings": {
+    "source_config": "D:\\Proyectos\\CMUAgent\\Proyectos\\config\\mock_req_dummy_system1.json",
+    "initialize_rag": true,
+    "research_mode": "multiagent"
+  },
+  "stages": [
+    {
+      "name": "source_extraction",
+      "status": "ok",
+      "started_utc": "2026-11-23T01:00:35.201612+00:00",
+      "finished_utc": "2026-11-23T01:00:35.802270+00:00"
+    },
+    {
+      "name": "sql_ast_parsing",
+      "status": "ok",
+      "started_utc": "2026-11-23T01:00:35.808268+00:00",
+      "finished_utc": "2026-11-23T01:00:39.317607+00:00"
+    },
+    {
+      "name": "inventory_building",
+      "status": "ok",
+      "started_utc": "2026-11-23T01:00:39.322601+00:00",
+      "finished_utc": "2026-11-23T01:00:39.961380+00:00"
+    },
+    {
+      "name": "task_initialization",
+      "status": "ok",
+      "started_utc": "2026-11-23T01:00:39.984413+00:00",
+      "finished_utc": "2026-11-23T01:00:40.524544+00:00"
+    },
+    {
+      "name": "rag_initialization",
+      "status": "ok",
+      "started_utc": "2026-11-23T01:00:40.558927+00:00",
+      "index_stats": {
+        "index_file": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_04_multiagent_doc_rag\\rag\\index.json",
+        "chunks": 19,
+        "sql_chunks": 0,
+        "document_chunks": 19
+      },
+      "finished_utc": "2026-11-23T01:00:40.637559+00:00"
+    },
+    {
+      "name": "research_multiagent",
+      "status": "ok",
+      "started_utc": "2026-11-23T01:00:40.665832+00:00",
+      "summary": {
+        "verifier_calls": 6,
+        "verifier_llm_accepted": 6,
+        "verifier_deterministic_vetoes": 2,
+        "researcher_revisions": 2,
+        "deterministic_catalog_annotations": 2,
+        "technically_evidenced": 4,
+        "incomplete_research": 1
+      },
+      "finished_utc": "2026-11-23T01:11:21.765667+00:00"
+    },
+    {
+      "name": "pilot_evaluation",
+      "status": "ok",
+      "finished_utc": "2026-11-23T01:11:21.904498+00:00",
+      "summary": {
+        "reference_cases": 5,
+        "structural_correctness": 0.8,
+        "predicate_groundedness": 1.0,
+        "classification_accuracy": 0.8
+      }
+    }
+  ],
+  "artifacts": {
+    "source_extraction": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_04_multiagent_doc_rag\\sources_manifest.json",
+    "sql_ast_parsing": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_04_multiagent_doc_rag\\ast_files\\ast_manifest.json",
+    "inventory_building": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_04_multiagent_doc_rag\\metadata\\inventory.json",
+    "task_initialization": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_04_multiagent_doc_rag\\research\\research_tasks.json",
+    "research_multiagent": "prompt_preview_only",
+    "pilot_evaluation": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_04_multiagent_doc_rag\\research\\evaluation_metrics.json"
+  },
+  "finished_utc": "2026-11-23T01:11:21.936528+00:00"
+}

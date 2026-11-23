@@ -1,0 +1,24 @@
+{
+  "schema_version": "2.0",
+  "generated_utc": "2026-11-23T01:22:47.374390+00:00",
+  "pending": [
+    {
+      "task_id": "TASK-E5EB80513566",
+      "object": "dbo.RegisterOperationAfterCheck",
+      "reason": "incomplete_research",
+      "issues": [
+        "Researcher did not produce a valid source-backed final proposal"
+      ],
+      "question_for_expert": "Are the remaining conditions and interpretations sufficient to confirm this candidate?",
+      "candidate_rule": null,
+      "source": {
+        "source_file": "sql_sources/05_RegisterOperationAfterCheck.sql",
+        "ast_file": "ast_files/sql_sources/05_RegisterOperationAfterCheck.sql.ast.json",
+        "start_line": 8,
+        "end_line": 15,
+        "ast_node_type": "logical_workflow"
+      },
+      "verification_file": "verifications\\TASK-E5EB80513566.json"
+    }
+  ]
+}

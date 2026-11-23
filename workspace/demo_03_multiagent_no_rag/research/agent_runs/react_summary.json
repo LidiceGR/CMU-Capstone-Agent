@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.2",
+  "mode": "react_two_phase_v05",
+  "started_utc": "2026-11-23T00:48:18.687097+00:00",
+  "finished_utc": "2026-11-23T00:54:59.486712+00:00",
+  "status": "completed_with_errors",
+  "model_id": "Qwen/Qwen3-0.6B",
+  "tasks_file": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_03_multiagent_no_rag\\research\\research_tasks.json",
+  "derived_tasks_file": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_03_multiagent_no_rag\\research\\derived_tasks.json",
+  "settings": {
+    "max_actions": 4,
+    "max_derived_tasks": 6,
+    "max_depth": 1,
+    "policy_fallback": false,
+    "catalog_evidence_gate": true,
+    "max_initial_tasks": 0
+  },
+  "counts": {
+    "processed": 5,
+    "initial_processed": 5,
+    "derived_created": 0,
+    "derived_processed": 0,
+    "valid_json": 4,
+    "evidence_incomplete": 1,
+    "research_incomplete": 0,
+    "invalid_response": 0,
+    "execution_error": 0,
+    "candidate_rules_proposed": 4,
+    "tool_actions_executed": 10,
+    "queue_actions_executed": 0,
+    "model_actions_executed": 9,
+    "policy_actions_executed": 1,
+    "research_decisions": 17,
+    "final_generations": 5,
+    "format_repair_attempts": 5,
+    "format_repairs_successful": 5,
+    "document_prefetch_tools_executed": 0,
+    "catalog_gate_actions_executed": 1,
+    "duplicate_action_rejections": 3,
+    "total_pending": 5,
+    "selected": 5,
+    "not_selected": 0
+  },
+  "results": [
+    {
+      "task_id": "TASK-D3FBA04B682D",
+      "depth": 0,
+      "status": "valid_json",
+      "result_file": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_03_multiagent_no_rag\\research\\agent_runs\\TASK-D3FBA04B682D_20261123T005033711467Z.json",
+      "classification": "candidate_business_rule",
+      "candidate_rule_proposed": true,
+      "research_stop_reason": "budget_exhausted",
+      "model_actions_executed": 3,
+      "policy_actions_executed": 1,
+      "tool_actions_executed": 4,
+      "document_prefetch_tools_executed": 0,
+      "duplicate_action_rejections": 2,
+      "evidence_status": "passed",
+      "validation_errors": [],
+      "related_task_links": [
+        {
+          "status": "linked_existing",
+          "object_name": "dbo.trg_Operations_ValidateAmount",
+          "task_ids": [
+            "TASK-272C2288A360"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "TASK-272C2288A360",
+      "depth": 0,
+      "status": "valid_json",
+      "result_file": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_03_multiagent_no_rag\\research\\agent_runs\\TASK-272C2288A360_20261123T005120969814Z.json",
+      "classification": "candidate_business_rule",
+      "candidate_rule_proposed": true,
+      "research_stop_reason": "model_finish",
+      "model_actions_executed": 1,
+      "policy_actions_executed": 0,
+      "tool_actions_executed": 1,
+      "document_prefetch_tools_executed": 0,
+      "duplicate_action_rejections": 0,
+      "evidence_status": "passed",
+      "validation_errors": [],
+      "related_task_links": []
+    },
+    {
+      "task_id": "TASK-3FAB90CBBFA4",
+      "depth": 0,
+      "status": "evidence_incomplete",
+      "result_file": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_03_multiagent_no_rag\\research\\agent_runs\\TASK-3FAB90CBBFA4_20261123T005332717648Z.json",
+      "classification": "candidate_business_rule",
+      "candidate_rule_proposed": true,
+      "research_stop_reason": "budget_exhausted",
+      "model_actions_executed": 4,
+      "policy_actions_executed": 0,
+      "tool_actions_executed": 4,
+      "document_prefetch_tools_executed": 0,
+      "duplicate_action_rejections": 1,
+      "evidence_status": "incomplete",
+      "validation_errors": [],
+      "related_task_links": [
+        {
+          "status": "linked_existing",
+          "object_name": "dbo.trg_Operations_ValidateAmount",
+          "task_ids": [
+            "TASK-272C2288A360"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "TASK-4D9C830B0699",
+      "depth": 0,
+      "status": "valid_json",
+      "result_file": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_03_multiagent_no_rag\\research\\agent_runs\\TASK-4D9C830B0699_20261123T005406794668Z.json",
+      "classification": "candidate_business_rule",
+      "candidate_rule_proposed": true,
+      "research_stop_reason": "model_finish",
+      "model_actions_executed": 0,
+      "policy_actions_executed": 0,
+      "tool_actions_executed": 0,
+      "document_prefetch_tools_executed": 0,
+      "duplicate_action_rejections": 0,
+      "evidence_status": "passed",
+      "validation_errors": [],
+      "related_task_links": []
+    },
+    {
+      "task_id": "TASK-E5EB80513566",
+      "depth": 0,
+      "status": "valid_json",
+      "result_file": "D:\\Proyectos\\CMUAgent\\Proyectos\\workspace\\demo_03_multiagent_no_rag\\research\\agent_runs\\TASK-E5EB80513566_20261123T005459470690Z.json",
+      "classification": "candidate_business_rule",
+      "candidate_rule_proposed": true,
+      "research_stop_reason": "model_finish",
+      "model_actions_executed": 1,
+      "policy_actions_executed": 0,
+      "tool_actions_executed": 1,
+      "document_prefetch_tools_executed": 0,
+      "duplicate_action_rejections": 0,
+      "evidence_status": "passed",
+      "validation_errors": [],
+      "related_task_links": []
+    }
+  ],
+  "note": "This loop executes local Python read-only tools, not an MCP server; model requests and policy actions are counted separately."
+}

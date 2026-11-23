@@ -1,0 +1,131 @@
+"""CLI for single-pass research of one task or a batch of pending tasks."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+from lib.artifact_io import write_json
+from .agent import analyze_task, load_task, render_prompt
+from .batch import run_batch
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Analyze structural SQL research tasks with a local LLM")
+    parser.add_argument("--tasks", required=True, type=Path, help="Existing research_tasks.json")
+    parser.add_argument("--task-id", help="Task ID for single-task mode; defaults to first pending task")
+    parser.add_argument("--preview", action="store_true", help="Show one prompt without loading Qwen")
+    parser.add_argument("--batch", action="store_true", help="Analyze all pending tasks sequentially")
+    parser.add_argument("--react", action="store_true", help="Bounded ReAct research with read-only tools and derived tasks")
+    parser.add_argument("--multiagent", action="store_true", help="Research plus independent evidence verification and bounded feedback")
+    parser.add_argument("--react-strategy", choices=("v04", "v05"), default="v04",
+                        help="Legacy combined prompts or separate research-decision/final prompts")
+    parser.add_argument("--catalog-evidence-gate", action="store_true",
+                        help="Require available source-backed catalog lookups before accepting FINISH in v05; label controller actions")
+    parser.add_argument("--policy-fallback", action="store_true",
+                        help="Allow labeled deterministic evidence-gap actions when the model finishes early")
+    parser.add_argument("--max-actions", type=int, default=3, help="Maximum ACT/OBSERVE actions per ReAct task")
+    parser.add_argument("--max-derived-tasks", type=int, default=4, help="Maximum source-backed derived tasks")
+    parser.add_argument("--max-depth", type=int, default=1, help="Maximum derived task depth")
+    parser.add_argument("--max-verification-rounds", type=int, default=2)
+    parser.add_argument("--max-feedback-actions", type=int, default=3)
+    parser.add_argument("--max-tasks", type=int, default=0, help="Batch limit; 0 means all pending tasks")
+    parser.add_argument("--model-id", default="Qwen/Qwen3-0.6B")
+    parser.add_argument("--max-new-tokens", type=int, default=512)
+    parser.add_argument("--output-directory", type=Path, help="Output directory for individual agent runs")
+    args = parser.parse_args()
+
+    if sum(bool(x) for x in (args.batch,args.react,args.multiagent)) > 1:
+        parser.error("--batch, --react and --multiagent are mutually exclusive")
+    if (args.batch or args.react or args.multiagent) and (args.task_id is not None or args.preview):
+        parser.error("--batch/--react cannot be combined with --task-id or --preview")
+    if args.max_tasks < 0 or (not (args.batch or args.react or args.multiagent) and args.max_tasks != 0):
+        parser.error("--max-tasks must be nonnegative and requires --batch or --react")
+    if min(args.max_actions, args.max_derived_tasks, args.max_depth) < 0:
+        parser.error("ReAct limits must be nonnegative")
+
+    if args.multiagent:
+        from llm.local_qwen import LocalQwen
+        from evidence_verifier.orchestrator import run_multiagent_batch
+        model=LocalQwen(model_id=args.model_id,max_new_tokens=args.max_new_tokens)
+        summary=run_multiagent_batch(
+            args.tasks,model.generate,model_id=args.model_id,max_tasks=args.max_tasks,
+            max_actions=args.max_actions,max_derived_tasks=args.max_derived_tasks,
+            max_depth=args.max_depth,policy_fallback=args.policy_fallback,
+            catalog_evidence_gate=args.catalog_evidence_gate,
+            max_verification_rounds=args.max_verification_rounds,
+            max_feedback_actions=args.max_feedback_actions,
+            output_directory=args.output_directory,device_provider=lambda: model.device,
+        )
+        print(json.dumps(summary["counts"],indent=2))
+        return 0 if summary["status"]=="completed" else 1
+
+    if args.react:
+        from llm.local_qwen import LocalQwen
+        if args.react_strategy == "v05":
+            from .react_v05 import run_react_batch_v05 as run_react_batch
+        else:
+            from .react import run_react_batch
+
+        model = LocalQwen(model_id=args.model_id, max_new_tokens=args.max_new_tokens)
+        options = {"policy_fallback": args.policy_fallback,
+                   "catalog_evidence_gate": args.catalog_evidence_gate} if args.react_strategy == "v05" else {}
+        summary = run_react_batch(
+            args.tasks, model.generate, model_id=args.model_id,
+            max_tasks=args.max_tasks, max_actions=args.max_actions,
+            max_derived_tasks=args.max_derived_tasks, max_depth=args.max_depth,
+            output_directory=args.output_directory, device_provider=lambda: model.device,
+            **options,
+        )
+        print(json.dumps(summary["counts"], indent=2))
+        return 0 if summary["status"] == "completed" else 1
+
+    if args.batch:
+        from llm.local_qwen import LocalQwen
+
+        # The same model instance handles every task. Loading occurs lazily on
+        # the first generation, so empty batches do not load any model weights.
+        model = LocalQwen(model_id=args.model_id, max_new_tokens=args.max_new_tokens)
+        summary = run_batch(
+            args.tasks, model.generate, model_id=args.model_id,
+            max_tasks=args.max_tasks,
+            output_directory=args.output_directory,
+            device_provider=lambda: model.device,
+        )
+        return 0 if summary["status"] == "completed" else 1
+
+    task = load_task(args.tasks, args.task_id)
+    print(f"[task_selected] id={task['task_id']} object={task['target']['object_name']} operation={task['fragment']['operation']}", flush=True)
+    if args.preview:
+        print("\n--- PROMPT PREVIEW (MODEL NOT LOADED) ---")
+        print(render_prompt(task))
+        return 0
+
+    from llm.local_qwen import LocalQwen
+
+    model = LocalQwen(model_id=args.model_id, max_new_tokens=args.max_new_tokens)
+    result = analyze_task(task, model.generate, model_id=args.model_id)
+    result["device"] = model.device
+    output_dir = args.output_directory or args.tasks.parent / "agent_runs"
+    suffix = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    path = output_dir / f"{task['task_id']}_{suffix}.json"
+    if path.exists():
+        raise FileExistsError(f"Output already exists: {path}")
+    write_json(path, result)
+    print(f"[agent_completed] status={result['status']} elapsed_seconds={result['elapsed_seconds']}", flush=True)
+    if result["decision"] is not None:
+        print(json.dumps(result["decision"], indent=2, ensure_ascii=False), flush=True)
+    if result["validation_errors"]:
+        print(f"Validation issues: {result['validation_errors']}", flush=True)
+    if result.get("evidence_check") is not None:
+        print(f"[evidence_check] status={result['evidence_check']['status']} issues={result['evidence_check']['issues']}", flush=True)
+        if result['evidence_check']['warnings']:
+            print(f"[evidence_warnings] {result['evidence_check']['warnings']}", flush=True)
+    print(f"Result file: {path}", flush=True)
+    return 0 if result["status"] == "valid_json" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "reference_type": "developer_authored_synthetic_SQL_fixture",
+  "review_status": "not_independently_expert_adjudicated",
+  "note": "Predicates and source effects were transcribed from fictional SQL samples. This enables a small, reproducible structural proxy evaluation, not production correctness claims.",
+  "cases": [
+    {"task_id":"TASK-D3FBA04B682D", "object":"dbo.ApproveOperation", "source_file":"sql_sources/01_ApproveOperation.sql", "expected_classification":"candidate_business_rule", "expected_predicates":["OperationId = @OperationId", "Status = 'PENDING'", "Amount > 0"], "expected_effect_terms":["Status", "APPROVED", "update"], "source_effect_anchors":["UPDATE dbo.Operations", "Status = 'APPROVED'"]},
+    {"task_id":"TASK-272C2288A360", "object":"dbo.trg_Operations_ValidateAmount", "source_file":"sql_sources/01_ValidateAmount.sql", "expected_classification":"candidate_business_rule", "expected_predicates":["Amount <= 0"], "expected_effect_terms":["throw", "Amount"], "source_effect_anchors":["Amount <= 0", "THROW 50001"]},
+    {"task_id":"TASK-3FAB90CBBFA4", "object":"dbo.RegisterOperation", "source_file":"sql_sources/02_RegisterOperation.sql", "expected_classification":"candidate_business_rule", "expected_predicates":["@OperationType = 2", "@Amount > 0"], "expected_effect_terms":["insert", "Operations", "PENDING"], "source_effect_anchors":["INSERT INTO dbo.Operations", "@OperationType = 2", "@Amount > 0"]},
+    {"task_id":"TASK-4D9C830B0699", "object":"dbo.HasPendingOperationCheck", "source_file":"sql_sources/04_HasPendingOperationCheck.sql", "expected_classification":"candidate_business_rule", "expected_predicates":["OperationId = @OperationId", "Status = 'PENDING'"], "expected_effect_terms":["@HasPending", "1", "0"], "source_effect_anchors":["SET @HasPending = 0", "SET @HasPending = 1"]},
+    {"task_id":"TASK-E5EB80513566", "object":"dbo.RegisterOperationAfterCheck", "source_file":"sql_sources/05_RegisterOperationAfterCheck.sql", "expected_classification":"candidate_business_rule", "expected_predicates":["@HasPending = 0"], "expected_effect_terms":["HasPendingOperationCheck", "RegisterOperation"], "source_effect_anchors":["EXEC dbo.HasPendingOperationCheck", "IF @HasPending = 0", "EXEC dbo.RegisterOperation"]}
+  ]
+}
